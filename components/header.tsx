@@ -13,7 +13,14 @@ export const Header = () => {
                         <Navigation />
                     </div>
                     <ClerkLoaded>
-                        <UserButton />
+                        <UserButton
+                            showName={true}
+                            appearance={{
+                                elements: {
+                                    userButtonOuterIdentifier: 'text-white',
+                                },
+                            }}
+                        />
                     </ClerkLoaded>
                     <ClerkLoading>
                         <Loader2 className="size-8 animate-spin text-slate-500" />
