@@ -24,7 +24,7 @@ const SignInPage = () => {
                 </div>
             </div>
             <div className="h-full hidden lg:flex items-center justify-center bg-black">
-                <Image src={'/logo.png'} width={200} height={200} alt="logo" />
+                <Image src={'/logo.png'} width={250} height={250} alt="logo" />
             </div>
         </div>
     );
