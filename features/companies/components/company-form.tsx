@@ -26,11 +26,17 @@ import { Calendar } from '@/components/ui/calendar';
 
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = insertCompanySchema.pick({
     name: true,
     jobRole: true,
     joiningDate: true,
+    wageDayPay: true,
+    wageNightPay: true,
+    wageSaturdayPay: true,
+    wageSundayPay: true,
 });
 
 type FormValues = z.input<typeof formSchema>;
@@ -180,6 +186,103 @@ export const CompanyForm = ({
                         </FormItem>
                     )}
                 />
+                <div className="space-y-4">
+                    <Label className="text-base">Wage</Label>
+                    <Separator />
+                    <div className="space-y-4">
+                        <div>
+                            <Label className="text-sm text-muted-foreground">
+                                Weekday Pay
+                            </Label>
+                            <div className="flex flex-row gap-4 ">
+                                <FormField
+                                    name="wageDayPay"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Day Pay</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    disabled={disabled}
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="wageNightPay"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Night Pay</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    disabled={disabled}
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <Label className="text-sm text-muted-foreground">
+                                Weekend Pay
+                            </Label>
+                            <div className="flex flex-row gap-4">
+                                <FormField
+                                    name="wageSaturdayPay"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Saturday Pay</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    disabled={disabled}
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="wageSundayPay"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Sunday Pay</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    disabled={disabled}
+                                                    {...field}
+                                                    value={field.value ?? ''}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <Button className="w-full" disabled={disabled}>
                     {id ? 'Save Changes' : 'Create Company'}
                 </Button>

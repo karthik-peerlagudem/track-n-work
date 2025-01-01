@@ -1,5 +1,5 @@
 {
-  "id": "88166b8c-06d8-4909-8e32-0677dc5b78f4",
+  "id": "913430ed-747b-409a-ad30-84db8cc357b7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -48,6 +48,34 @@
           "type": "date",
           "primaryKey": false,
           "notNull": false
+        },
+        "wage_day_pay": {
+          "name": "wage_day_pay",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "wage_night_pay": {
+          "name": "wage_night_pay",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "wage_saturday_pay": {
+          "name": "wage_saturday_pay",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "wage_sunday_pay": {
+          "name": "wage_sunday_pay",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
         },
         "created_at": {
           "name": "created_at",

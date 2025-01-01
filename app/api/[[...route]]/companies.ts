@@ -23,6 +23,10 @@ const app = new Hono()
                 name: companies.name,
                 jobRole: companies.jobRole,
                 joiningDate: companies.joiningDate,
+                wageDayPay: companies.wageDayPay,
+                wageNightPay: companies.wageNightPay,
+                wageSaturdayPay: companies.wageSaturdayPay,
+                wageSundayPay: companies.wageSundayPay,
             })
             .from(companies)
             .where(eq(companies.userId, auth.userId))
@@ -53,6 +57,10 @@ const app = new Hono()
                     name: companies.name,
                     jobRole: companies.jobRole,
                     joiningDate: companies.joiningDate,
+                    wageDayPay: companies.wageDayPay,
+                    wageNightPay: companies.wageNightPay,
+                    wageSaturdayPay: companies.wageSaturdayPay,
+                    wageSundayPay: companies.wageSundayPay,
                 })
                 .from(companies)
                 .where(
@@ -74,6 +82,10 @@ const app = new Hono()
                 name: true,
                 jobRole: true,
                 joiningDate: true,
+                wageDayPay: true,
+                wageNightPay: true,
+                wageSaturdayPay: true,
+                wageSundayPay: true,
             })
         ),
         async (c) => {
@@ -105,6 +117,10 @@ const app = new Hono()
                 name: true,
                 jobRole: true,
                 joiningDate: true,
+                wageDayPay: true,
+                wageNightPay: true,
+                wageSaturdayPay: true,
+                wageSundayPay: true,
             })
         ),
         async (c) => {

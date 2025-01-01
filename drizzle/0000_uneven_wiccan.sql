@@ -4,6 +4,10 @@ CREATE TABLE "companies" (
 	"user_id" text NOT NULL,
 	"job_role" text,
 	"joining_date" date,
+	"wage_day_pay" numeric(10, 2) DEFAULT '0',
+	"wage_night_pay" numeric(10, 2) DEFAULT '0',
+	"wage_saturday_pay" numeric(10, 2) DEFAULT '0',
+	"wage_sunday_pay" numeric(10, 2) DEFAULT '0',
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );

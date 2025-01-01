@@ -19,6 +19,10 @@ const formSchema = insertCompanySchema.pick({
     name: true,
     jobRole: true,
     joiningDate: true,
+    wageDayPay: true,
+    wageNightPay: true,
+    wageSaturdayPay: true,
+    wageSundayPay: true,
 });
 
 type FormValues = z.input<typeof formSchema>;

@@ -23,6 +23,10 @@ const formSchema = insertCompanySchema.pick({
     name: true,
     jobRole: true,
     joiningDate: true,
+    wageDayPay: true,
+    wageNightPay: true,
+    wageSaturdayPay: true,
+    wageSundayPay: true,
 });
 
 type FormValues = z.input<typeof formSchema>;
@@ -66,11 +70,19 @@ export const EditCompanySheet = () => {
               name: companyQuery.data.name,
               jobRole: companyQuery.data.jobRole,
               joiningDate: companyQuery.data.joiningDate,
+              wageDayPay: companyQuery.data.wageDayPay,
+              wageNightPay: companyQuery.data.wageNightPay,
+              wageSaturdayPay: companyQuery.data.wageSaturdayPay,
+              wageSundayPay: companyQuery.data.wageSundayPay,
           }
         : {
               name: '',
               jobRole: '',
               joiningDate: '',
+              wageDayPay: '0',
+              wageNightPay: '0',
+              wageSaturdayPay: '0',
+              wageSundayPay: '0',
           };
 
     return (
