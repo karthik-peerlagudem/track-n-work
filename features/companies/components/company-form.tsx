@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { CalendarIcon, Trash } from 'lucide-react';
+import { CalendarIcon, Loader2, Trash } from 'lucide-react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { insertCompanySchema } from '@/database/schema';
+// import { insertCompanySchema } from '@/database/schema';
 
 import { Input } from '@/components/ui/input';
 import {
@@ -29,14 +29,38 @@ import { format } from 'date-fns';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
-const formSchema = insertCompanySchema.pick({
-    name: true,
-    jobRole: true,
-    joiningDate: true,
-    wageDayPay: true,
-    wageNightPay: true,
-    wageSaturdayPay: true,
-    wageSundayPay: true,
+const formSchema = z.object({
+    name: z.string().regex(/^[a-zA-Z\s]*$/, 'Invalid company name'),
+    jobRole: z.string().regex(/^[a-zA-Z\s]*$/, 'Invalid job role'),
+    joiningDate: z.string().min(1, 'Joining date is required'),
+    wageDayPay: z
+        .string()
+        .regex(/^\d+(\.\d{0,2})?$/, 'please enter a valid number')
+        .refine((val) => {
+            const num = parseFloat(val);
+            return !isNaN(num) && num >= 0;
+        }, 'please enter a valid number'),
+    wageNightPay: z
+        .string()
+        .regex(/^\d+(\.\d{0,2})?$/, 'please enter a valid number')
+        .refine((val) => {
+            const num = parseFloat(val);
+            return !isNaN(num) && num >= 0;
+        }, 'please enter a valid number'),
+    wageSaturdayPay: z
+        .string()
+        .regex(/^\d+(\.\d{0,2})?$/, 'please enter a valid number')
+        .refine((val) => {
+            const num = parseFloat(val);
+            return !isNaN(num) && num >= 0;
+        }, 'please enter a valid number'),
+    wageSundayPay: z
+        .string()
+        .regex(/^\d+(\.\d{0,2})?$/, 'please enter a valid number')
+        .refine((val) => {
+            const num = parseFloat(val);
+            return !isNaN(num) && num >= 0;
+        }, 'please enter a valid number'),
 });
 
 type FormValues = z.input<typeof formSchema>;
@@ -72,10 +96,18 @@ export const CompanyForm = ({
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: defaultValues,
+        mode: 'onChange', // Enable real-time validation
     });
 
     const handleSubmit = (values: FormValues) => {
-        onSubmit(values);
+        const modifiedValues = {
+            ...values,
+            wageDayPay: values.wageDayPay.toString(),
+            wageNightPay: values.wageNightPay.toString(),
+            wageSaturdayPay: values.wageSaturdayPay.toString(),
+            wageSundayPay: values.wageSundayPay.toString(),
+        };
+        onSubmit(modifiedValues);
     };
 
     const handleDelete = () => {
@@ -102,6 +134,7 @@ export const CompanyForm = ({
                                     value={field.value ?? ''}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -119,6 +152,7 @@ export const CompanyForm = ({
                                     value={field.value ?? ''}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -194,7 +228,7 @@ export const CompanyForm = ({
                             <Label className="text-sm text-muted-foreground">
                                 Weekday Pay
                             </Label>
-                            <div className="flex flex-row gap-4 ">
+                            <div className="flex flex-row gap-4">
                                 <FormField
                                     name="wageDayPay"
                                     control={form.control}
@@ -203,14 +237,14 @@ export const CompanyForm = ({
                                             <FormLabel>Day Pay</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    placeholder="0.00"
+                                                    type="text"
+                                                    placeholder="0"
                                                     disabled={disabled}
                                                     {...field}
                                                     value={field.value ?? ''}
                                                 />
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
@@ -222,14 +256,14 @@ export const CompanyForm = ({
                                             <FormLabel>Night Pay</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    placeholder="0.00"
+                                                    type="text"
+                                                    placeholder="0"
                                                     disabled={disabled}
                                                     {...field}
                                                     value={field.value ?? ''}
                                                 />
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
@@ -249,14 +283,14 @@ export const CompanyForm = ({
                                             <FormLabel>Saturday Pay</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    placeholder="0.00"
+                                                    type="text"
+                                                    placeholder="0"
                                                     disabled={disabled}
                                                     {...field}
                                                     value={field.value ?? ''}
                                                 />
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
@@ -268,14 +302,14 @@ export const CompanyForm = ({
                                             <FormLabel>Sunday Pay</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    placeholder="0.00"
+                                                    type="text"
+                                                    placeholder="0"
                                                     disabled={disabled}
                                                     {...field}
                                                     value={field.value ?? ''}
                                                 />
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
@@ -283,7 +317,13 @@ export const CompanyForm = ({
                         </div>
                     </div>
                 </div>
-                <Button className="w-full" disabled={disabled}>
+                <Button
+                    className="w-full"
+                    disabled={!form.formState.isValid || disabled}
+                >
+                    {disabled ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : null}
                     {id ? 'Save Changes' : 'Create Company'}
                 </Button>
                 {!!id && (
