@@ -15,6 +15,9 @@ export const useGetCompanies = () => {
             const { data } = await response.json();
             return data;
         },
+        //configuring limited retries
+        retry: 2,
+        retryDelay: 1500, //wait 1.5 seconds before retrying
     });
     return query;
 };
