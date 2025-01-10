@@ -5,10 +5,9 @@ import {
     startOfWeek,
     endOfWeek,
     parse,
-    isSaturday,
-    isSunday,
+    differenceInMinutes,
 } from 'date-fns';
-import { BadgeDollarSign, Loader2, TimerIcon } from 'lucide-react';
+import { BadgeDollarSign, Clock, Loader2 } from 'lucide-react';
 
 import { WorkHoursListing } from '@/features/hours/components/work-hours-listing';
 import { WorkHoursListingItem } from '@/features/hours/components/work-hours-listing-item';
@@ -46,6 +45,8 @@ interface WorkHour {
     wageSaturdayPay: string;
     wageSundayPay: string;
     totalHours: number;
+    isOvernightShift: boolean;
+    endDate?: string | null;
 }
 interface WorkHourWithPay {
     id: number;
@@ -62,29 +63,54 @@ interface WeekTotals {
     totalEstimatedPay: number;
 }
 
-const getEstimatedPay = (data: WorkHour): number => {
+const getEstimatedPay = (data: WorkHour) => {
     if (!data) return 0;
-
     try {
-        const workingDate = new Date(data.workDate);
-        const timeStart = parse(data.startTime, 'HH:mm:ss', new Date());
-        const hour = timeStart.getHours();
+        const startDateTime = parse(
+            data.startTime + ':00',
+            'HH:mm:ss',
+            new Date(data.workDate)
+        );
+        let endDateTime = parse(
+            data.endTime + ':00',
+            'HH:mm:ss',
+            new Date(data.workDate)
+        );
 
-        if (isSaturday(workingDate)) {
-            return parseFloat(data.wageSaturdayPay || '0');
+        const workDate = new Date(data.workDate);
+        const dayOfWeek = workDate.getDay();
+
+        if (data.isOvernightShift) {
+            endDateTime = parse(
+                data.endTime,
+                'HH:mm:ss',
+                new Date(data.endDate || addDays(new Date(data.workDate), 1))
+            );
         }
 
-        if (isSunday(workingDate)) {
-            return parseFloat(data.wageSundayPay || '0');
+        // Calculate total minutes
+        const minutesWorked = differenceInMinutes(endDateTime, startDateTime);
+        const hoursWorked = minutesWorked / 60;
+
+        // Determine rate based on day and time
+        let rate = parseFloat(data.wageDayPay);
+
+        // Weekend rates
+        if (dayOfWeek === 6) {
+            // Saturday
+            rate = parseFloat(data.wageSaturdayPay);
+        } else if (dayOfWeek === 0) {
+            // Sunday
+            rate = parseFloat(data.wageSundayPay);
+        } else {
+            // Weekday - check for night rate
+            const startHour = startDateTime.getHours();
+            if (startHour >= 18 || startHour < 6) {
+                rate = parseFloat(data.wageNightPay);
+            }
         }
 
-        // Weekday rate based on time
-        if (hour >= 18 || hour < 6) {
-            return parseFloat(data.wageNightPay || '0');
-        }
-
-        const payRate = parseFloat(data.wageDayPay || '0');
-        return Number((payRate * data.totalHours).toFixed(2));
+        return rate * hoursWorked;
     } catch (error) {
         console.error('Error calculating earnings:', error);
         return 0;
@@ -160,7 +186,7 @@ export const CurrentFortnight = () => {
                     <WorkHoursListing date={currentWeek.start}>
                         <div className=" flex justify-start gap-4">
                             <div className="flex items-center justify-start gap-2">
-                                <TimerIcon className="size-2 text-muted-foreground" />
+                                <Clock className="size-2 text-muted-foreground" />
                                 {firstWeekTotals.totalHours.toFixed(2)} hrs
                             </div>
                             <div className="flex items-center justify-start gap-2">
@@ -191,7 +217,7 @@ export const CurrentFortnight = () => {
                     <WorkHoursListing date={nextWeek.start}>
                         <div className=" flex justify-start gap-4">
                             <div className="flex items-center justify-start gap-2">
-                                <TimerIcon className="size-2 text-muted-foreground" />
+                                <Clock className="size-2 text-muted-foreground" />
                                 {secondWeekTotals.totalHours.toFixed(2)} hrs
                             </div>
                             <div className="flex items-center justify-start gap-2">

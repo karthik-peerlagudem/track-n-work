@@ -41,6 +41,7 @@ const app = new Hono()
                     wageSaturdayPay: companies.wageSaturdayPay,
                     wageSundayPay: companies.wageSundayPay,
                     workDate: hours.workDate,
+                    endDate: hours.endDate,
                     isOvernightShift: hours.isOvernightShift,
                     startTime:
                         sql<string>`TO_CHAR(${hours.startTime}::time, 'HH24:MI')`.mapWith(
