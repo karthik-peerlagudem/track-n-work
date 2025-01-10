@@ -12,9 +12,12 @@ function makeQueryClient() {
     return new QueryClient({
         defaultOptions: {
             queries: {
-                // With SSR, we usually want to set some default staleTime
-                // above 0 to avoid refetching immediately on the client
-                staleTime: 60 * 1000,
+                staleTime: 60 * 1000 * 5, // Data considered fresh for 5 minutes
+                gcTime: 1000 * 60 * 30, // Keep Data cached for 30 minutes
+                refetchOnWindowFocus: false,
+                retry: 2,
+                retryDelay: (attemptIndex) =>
+                    Math.min(1000 * 2 ** attemptIndex, 30000),
             },
         },
     });

@@ -1,6 +1,6 @@
 {
-  "id": "b6fc1b7f-860a-435f-8426-df26d5f6bf5b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "81b24854-7838-47b8-931a-a3f7f2c90a8e",
+  "prevId": "125fb6f8-b878-4d05-be2a-690b357e9626",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -138,15 +138,21 @@
           "primaryKey": false,
           "notNull": true
         },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
         "start_time": {
           "name": "start_time",
-          "type": "timestamp",
+          "type": "time",
           "primaryKey": false,
           "notNull": true
         },
         "end_time": {
           "name": "end_time",
-          "type": "timestamp",
+          "type": "time",
           "primaryKey": false,
           "notNull": true
         },
@@ -155,6 +161,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_overnight_shift": {
+          "name": "is_overnight_shift",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",

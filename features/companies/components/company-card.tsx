@@ -31,13 +31,17 @@ export const CompanyCard = ({ data }: Props) => {
 
     const calculateExperience = (joiningDate: string | null) => {
         if (!joiningDate) return 'N/A';
+
         const startDate = new Date(joiningDate);
         const currentDate = new Date();
         const years = differenceInYears(currentDate, startDate);
         const months = differenceInMonths(currentDate, startDate) % 12;
 
         if (years === 0) {
-            return `${months} months`;
+            if (months === 0) {
+                return 'Experience: Less than a month';
+            }
+            return ` Experience: ${months} month${months > 1 ? 's' : ''}`;
         }
         return `${years} year${years > 1 ? 's' : ''} ${months} month${
             months > 1 ? 's' : ''
@@ -55,7 +59,6 @@ export const CompanyCard = ({ data }: Props) => {
                     <CardDescription>{data.jobRole}</CardDescription>
                 </CardHeader>
                 <CardFooter className="text-muted-foreground text-sm">
-                    Experience:
                     {calculateExperience(data.joiningDate)}
                 </CardFooter>
             </Card>
