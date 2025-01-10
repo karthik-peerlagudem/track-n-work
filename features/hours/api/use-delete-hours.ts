@@ -20,6 +20,7 @@ export const useDeleteHours = (id?: string) => {
         onSuccess: () => {
             toast.success('Hours deleted');
             queryClient.invalidateQueries({ queryKey: ['hours'] });
+            queryClient.invalidateQueries({ queryKey: ['summary'] });
         },
         onError: () => {
             toast.error('Error deleting hours');

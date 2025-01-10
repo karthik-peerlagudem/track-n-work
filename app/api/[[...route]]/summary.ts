@@ -110,10 +110,78 @@ const app = new Hono().get('/', clerkMiddleware(), async (c) => {
         return total + rate * hoursWorked;
     }, 0);
 
+    //Data to generate the Area Chart
+    const dataChart = workHours.reduce(
+        (acc: Record<string, { hours: number; earnings: number }>, hour) => {
+            const workDate = hour.workDate;
+            const startDateTime = parse(
+                hour.startTime,
+                'HH:mm:ss',
+                new Date(workDate)
+            );
+            let endDateTime = parse(
+                hour.endTime,
+                'HH:mm:ss',
+                new Date(workDate)
+            );
+
+            if (hour.isOvernightShift) {
+                endDateTime = parse(
+                    hour.endTime,
+                    'HH:mm:ss',
+                    new Date(hour.endDate || addDays(new Date(workDate), 1))
+                );
+            }
+
+            // Calculate hours
+            const minutesWorked = differenceInMinutes(
+                endDateTime,
+                startDateTime
+            );
+            const hoursWorked = minutesWorked / 60;
+
+            // Calculate rate
+            const dayOfWeek = new Date(workDate).getDay();
+            let rate = parseFloat(hour.wageDayPay);
+            if (dayOfWeek === 6) {
+                rate = parseFloat(hour.wageSaturdayPay);
+            } else if (dayOfWeek === 0) {
+                rate = parseFloat(hour.wageSundayPay);
+            } else {
+                const startHour = startDateTime.getHours();
+                if (startHour >= 18 || startHour < 6) {
+                    rate = parseFloat(hour.wageNightPay);
+                }
+            }
+
+            // Add to accumulator
+            if (!acc[workDate]) {
+                acc[workDate] = { hours: 0, earnings: 0 };
+            }
+            acc[workDate].hours += hoursWorked;
+            acc[workDate].earnings += rate * hoursWorked;
+
+            return acc;
+        },
+        {}
+    );
+
+    // Convert to array and sort by date
+    const chartData = Object.entries(dataChart)
+        .map(([date, data]) => ({
+            date,
+            hours: Number(data.hours.toFixed(2)),
+            earnings: Number(data.earnings.toFixed(2)),
+        }))
+        .sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+
     return c.json({
         companiesCount: Number(totalCompanies[0].count),
         totalWorkingHours: totalHours.toFixed(2),
         totalEarnings: totalEarnings.toFixed(2),
+        chartData,
     });
 });
 

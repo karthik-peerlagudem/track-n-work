@@ -30,6 +30,7 @@ export const useCreateHours = () => {
         onSuccess: () => {
             toast.success('Logged Work Hours');
             queryClient.invalidateQueries({ queryKey: ['hours'] });
+            queryClient.invalidateQueries({ queryKey: ['summary'] });
         },
         onError: () => {
             toast.error('Error logging work hours');

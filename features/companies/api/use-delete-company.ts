@@ -20,6 +20,8 @@ export const useDeleteCompany = (id?: string) => {
         onSuccess: () => {
             toast.success('Company deleted');
             queryClient.invalidateQueries({ queryKey: ['companies'] });
+            queryClient.invalidateQueries({ queryKey: ['hours'] });
+            queryClient.invalidateQueries({ queryKey: ['summary'] });
         },
         onError: () => {
             toast.error('Error deleting company');

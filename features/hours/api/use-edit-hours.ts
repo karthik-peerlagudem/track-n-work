@@ -25,6 +25,7 @@ export const useEditHours = (id?: string) => {
         onSuccess: () => {
             toast.success('Hours updated');
             queryClient.invalidateQueries({ queryKey: ['hours'] });
+            queryClient.invalidateQueries({ queryKey: ['summary'] });
         },
         onError: () => {
             toast.error('Error updating hours');

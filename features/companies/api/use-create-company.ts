@@ -17,6 +17,8 @@ export const useCreateCompany = () => {
         onSuccess: () => {
             toast.success('Company created');
             queryClient.invalidateQueries({ queryKey: ['companies'] });
+            queryClient.invalidateQueries({ queryKey: ['hours'] });
+            queryClient.invalidateQueries({ queryKey: ['summary'] });
         },
         onError: () => {
             toast.error('Error creating company');
