@@ -7,14 +7,46 @@ const isPublicRoute = createRouteMatcher([
     '/api(.*)',
 ]);
 
+// Add allowed origins
+const allowedOrigins = [
+    'https://krthk.me',
+    'https://tracknwork.krthk.me',
+    'http://localhost:3000',
+];
+
 export default clerkMiddleware(async (auth, request) => {
+    const origin = request.headers.get('origin') || '';
+    const isAllowedOrigin = allowedOrigins.includes(origin);
+
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+        const response = NextResponse.next();
+        if (isAllowedOrigin) {
+            response.headers.set('Access-Control-Allow-Origin', origin);
+            response.headers.set(
+                'Access-Control-Allow-Methods',
+                'GET,HEAD,PUT,PATCH,POST,DELETE'
+            );
+            response.headers.set(
+                'Access-Control-Allow-Headers',
+                'Content-Type, Authorization'
+            );
+            response.headers.set('Access-Control-Max-Age', '86400');
+        }
+        return response;
+    }
+
     // Redirect unauthenticated users to /sign-in for protected routes
     if (!isPublicRoute(request) && !(await auth()).userId) {
-        console.log('Redirecting unauthenticated user to /sign-in');
         return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+    if (isAllowedOrigin) {
+        response.headers.set('Access-Control-Allow-Origin', origin);
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+    }
+    return response;
 });
 
 export const config = {
