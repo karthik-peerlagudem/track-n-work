@@ -1,36 +1,162 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Track N Work
+
+A comprehensive time tracking and wage calculation application built with Next.js, designed for workers managing multiple jobs with different pay rates.
+
+## Overview
+
+Track N Work helps users manage their working hours across different companies, automatically calculating earnings based on:
+
+-   Regular day rates
+-   Night shift rates
+-   Weekend rates
+-   Overtime calculations
+-   Multiple company management
+
+## Tech Stack
+
+-   Next.js 14 (App Router)
+-   TypeScript
+-   Tailwind CSS
+-   Shadcn/UI
+-   PostgreSQL
+-   Drizzle ORM
+-   Clerk Authentication
+-   Vercel Deployment
+
+## Environment Variables
+
+```env
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=''
+CLERK_SECRET_KEY=''
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+
+# Database
+DATABASE_URL=''
+
+# API URL
+NEXT_PUBLIC_API_URL=''
+```
+
+### Plan:
+
+1. Add project overview
+2. List tech stack
+3. Add environment variables
+4. Include setup instructions
+5. Add target audience section
+6. Include features list
+
+````markdown
+# Track N Work
+
+A comprehensive time tracking and wage calculation application built with Next.js, designed for workers managing multiple jobs with different pay rates.
+
+## Overview
+
+Track N Work helps users manage their working hours across different companies, automatically calculating earnings based on:
+
+-   Regular day rates
+-   Night shift rates
+-   Weekend rates
+-   Overtime calculations
+-   Multiple company management
+
+## Tech Stack
+
+-   Next.js 14 (App Router)
+-   TypeScript
+-   Tailwind CSS
+-   Shadcn/UI
+-   PostgreSQL
+-   Drizzle ORM
+-   Clerk Authentication
+-   Vercel Deployment
+
+## Environment Variables
+
+```env
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+
+# Database
+DATABASE_URL=
+
+# API URL
+NEXT_PUBLIC_API_URL=
+```
+````
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/track-n-work.git
+cd track-n-work
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+
+-   Copy `.env.example` to
+
+.env.local
+
+-   Fill in the required environment variables
+
+4. Set up the database:
+
+```bash
+npm run db:push
+```
+
+5. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Who Is This For?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   Casual workers managing multiple jobs
+-   Shift workers with variable pay rates
+-   Contract workers tracking hours across clients
+-   Small business owners managing employee time
+-   Students with part-time jobs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+-   📊 Interactive dashboard with earnings overview
+-   🕒 Easy time tracking with calendar integration
+-   💰 Automatic wage calculations
+-   📱 Responsive design for mobile access
+-   🌙 Dark/Light mode support
+-   📈 Visual reports and statistics
+-   🔄 Real-time updates
+-   🔐 Secure authentication
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+MIT License - see LICENSE file for details
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Contributions are welcome! Please read our contributing guidelines for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
