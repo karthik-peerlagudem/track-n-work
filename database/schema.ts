@@ -52,7 +52,9 @@ export const hours = pgTable(
     {
         id: integer('id').generatedAlwaysAsIdentity().primaryKey(),
         companyId: integer('company_id')
-            .references(() => companies.id)
+            .references(() => companies.id, {
+                onDelete: 'cascade',
+            })
             .notNull(),
         workDate: date('work_date').notNull(),
         endDate: date('end_date'),

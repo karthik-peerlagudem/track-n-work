@@ -30,10 +30,6 @@ const routes = [
         href: '/working-hours',
         label: 'Hours',
     },
-    {
-        href: '/settings',
-        label: 'Settings',
-    },
 ];
 
 export const Navigation = () => {

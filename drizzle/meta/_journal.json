@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1736303495616,
-      "tag": "0000_parched_cargill",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1736304417697,
-      "tag": "0001_spooky_microbe",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1736389805980,
-      "tag": "0002_complete_puppet_master",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1736422398789,
-      "tag": "0003_organic_ben_grimm",
+      "when": 1736562247108,
+      "tag": "0000_tiresome_blue_shield",
       "breakpoints": true
     }
   ]

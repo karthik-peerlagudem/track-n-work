@@ -36,7 +36,7 @@ export const EditCompanySheet = () => {
 
     const [ConfirmDialog, confirm] = useConfirm(
         'Delete Company',
-        'Are you sure you want to delete this company?'
+        'Are you sure you want to delete this company and the work logs associated with it?'
     );
 
     const companyQuery = useGetCompany(id?.toString());
