@@ -24,12 +24,12 @@ export const WorkHoursListing = ({ date, children }: WorkHoursListingProps) => {
 
     return (
         <Card>
-            <CardHeader>
+            <CardHeader className="">
                 <CardTitle className="text-lg font-semibold">
                     Week {weekNumber} ({month} {start}-{end})
                 </CardTitle>
             </CardHeader>
-            <CardContent>{children}</CardContent>
+            <CardContent className="p-3 md:p-6">{children}</CardContent>
         </Card>
     );
 };

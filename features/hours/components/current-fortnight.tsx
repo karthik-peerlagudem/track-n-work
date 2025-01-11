@@ -173,9 +173,12 @@ export const CurrentFortnight = () => {
 
     return (
         <>
-            <h2 className=" text-xl font-medium mt-4">
-                Fortnight ({format(new Date(currentWeek.start), 'dd, MMM yyyy')}{' '}
-                - {format(new Date(nextWeek.end), 'dd, MMM yyyy')}){' '}
+            <h2 className="font-bold mt-4">
+                CURRENT FORTNIGHT
+                <span className="block text-muted-foreground text-base font-normal">
+                    ({format(new Date(currentWeek.start), 'dd, MMM yyyy')} -{' '}
+                    {format(new Date(nextWeek.end), 'dd, MMM yyyy')}){' '}
+                </span>
             </h2>
             <div className="grid md:grid-cols-2 gap-4 mt-4">
                 {firstWorkingHourDataIsLoading ? (
@@ -184,7 +187,7 @@ export const CurrentFortnight = () => {
                     </div>
                 ) : (
                     <WorkHoursListing date={currentWeek.start}>
-                        <div className=" flex justify-start gap-4">
+                        <div className=" flex justify-start gap-4 mb-6">
                             <div className="flex items-center justify-start gap-2">
                                 <Clock className="size-2 text-muted-foreground" />
                                 {firstWeekTotals.totalHours.toFixed(2)} hrs

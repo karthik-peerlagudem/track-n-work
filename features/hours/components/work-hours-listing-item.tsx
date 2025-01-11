@@ -37,19 +37,22 @@ export const WorkHoursListingItem = ({
                     </div>
 
                     {/* Right side content */}
-                    <div className="px-8 flex justify-between w-full">
+                    <div className="grid grid-cols-2 pl-8 pr-4 lg:flex justify-between w-full">
                         {/* Middle: Company and Day */}
                         <div className="flex flex-col justify-center">
-                            <div className="font-medium">
-                                {companyName} - ({startTime} - {endTime})
+                            <div className="font-semibold lg:font-medium">
+                                {companyName}
+                                <span className="block font-medium md:inline-block">
+                                    ({startTime} - {endTime})
+                                </span>
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-sm text-muted-foreground mt-2">
                                 {format(workDate, 'EEEE')}
                             </div>
                         </div>
 
                         {/* Right: Hours and Pay */}
-                        <div className="flex flex-col items-end justify-between">
+                        <div className="flex flex-col items-end justify-between mt-4 lg:mt-0">
                             <div className="text-sm font-medium">
                                 Total time: {totalHours} hr
                             </div>
