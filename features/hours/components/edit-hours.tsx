@@ -46,6 +46,8 @@ import { useEditHours } from '@/features/hours/api/use-edit-hours';
 import { insertHoursSchema } from '@/database/schema';
 import { useConfirm } from '@/hooks/use-confirm';
 import { useDeleteHours } from '@/features/hours/api/use-delete-hours';
+import { useBrowser } from '@/hooks/use-browser';
+import { TimePicker } from '@/components/time-picker';
 
 const formSchema = insertHoursSchema
     .pick({
@@ -104,6 +106,7 @@ type Props = {
 
 export const EditHours = ({ companies }: Props) => {
     const { isOpen, onClose, id } = useOpenHours();
+    const { isSafari } = useBrowser();
 
     const [ConfirmDialog, confirm] = useConfirm(
         'Delete Hours',
@@ -281,23 +284,18 @@ export const EditHours = ({ companies }: Props) => {
                                                         ? 'Start Date'
                                                         : 'Date'}
                                                 </FormLabel>
-                                                <Popover
-                                                    open={isPopoverOpen}
-                                                    onOpenChange={
-                                                        setIsPopoverOpen
-                                                    }
-                                                >
-                                                    <PopoverTrigger asChild>
-                                                        <FormControl>
+                                                {isSafari ? (
+                                                    <Dialog
+                                                        open={isPopoverOpen}
+                                                        onOpenChange={
+                                                            setIsPopoverOpen
+                                                        }
+                                                    >
+                                                        <DialogTrigger asChild>
                                                             <Button
-                                                                variant={
-                                                                    'outline'
-                                                                }
-                                                                className={cn(
-                                                                    'w-[240px] pl-3 text-left font-normal',
-                                                                    !field.value &&
-                                                                        'text-muted-foreground'
-                                                                )}
+                                                                type="button"
+                                                                variant="outline"
+                                                                className="w-[240px] pl-3 text-left font-normal"
                                                             >
                                                                 {field.value ? (
                                                                     format(
@@ -312,55 +310,62 @@ export const EditHours = ({ companies }: Props) => {
                                                                 )}
                                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                             </Button>
-                                                        </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent
-                                                        className="w-auto p-0"
-                                                        align="start"
-                                                    >
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={
-                                                                field.value
-                                                            }
-                                                            onSelect={(
-                                                                date
-                                                            ) => {
-                                                                field.onChange(
+                                                        </DialogTrigger>
+                                                        <DialogContent className="w-auto p-4">
+                                                            <DialogTitle className="hidden">
+                                                                select a date
+                                                            </DialogTitle>
+                                                            <DialogDescription className="hidden">
+                                                                the date you
+                                                                have worked
+                                                            </DialogDescription>
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={
+                                                                    field.value
+                                                                        ? new Date(
+                                                                              field.value
+                                                                          )
+                                                                        : undefined
+                                                                }
+                                                                defaultMonth={
+                                                                    field.value
+                                                                        ? new Date(
+                                                                              field.value
+                                                                          )
+                                                                        : new Date()
+                                                                }
+                                                                disabled={(
                                                                     date
-                                                                );
-                                                                setIsPopoverOpen(
-                                                                    false
-                                                                );
-                                                            }}
-                                                            disabled={(date) =>
-                                                                date >
-                                                                    new Date() ||
-                                                                date <
-                                                                    new Date(
-                                                                        '1900-01-01'
-                                                                    )
-                                                            }
-                                                            initialFocus
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    {form.watch('isOvernightShift') && (
-                                        <FormField
-                                            control={form.control}
-                                            name="endDate"
-                                            disabled={true}
-                                            render={({ field }) => (
-                                                <FormItem className="flex flex-col mt-2">
-                                                    <FormLabel>
-                                                        End Date
-                                                    </FormLabel>
-                                                    <Popover>
+                                                                ) =>
+                                                                    date >
+                                                                        new Date() ||
+                                                                    date <
+                                                                        new Date(
+                                                                            '1900-01-01'
+                                                                        )
+                                                                }
+                                                                onSelect={(
+                                                                    date
+                                                                ) => {
+                                                                    field.onChange(
+                                                                        date
+                                                                    );
+                                                                    setIsPopoverOpen(
+                                                                        false
+                                                                    );
+                                                                }}
+                                                                initialFocus
+                                                            />
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                ) : (
+                                                    <Popover
+                                                        open={isPopoverOpen}
+                                                        onOpenChange={
+                                                            setIsPopoverOpen
+                                                        }
+                                                    >
                                                         <PopoverTrigger asChild>
                                                             <FormControl>
                                                                 <Button
@@ -398,35 +403,196 @@ export const EditHours = ({ companies }: Props) => {
                                                                 selected={
                                                                     field.value
                                                                 }
-                                                                onSelect={
-                                                                    field.onChange
-                                                                }
-                                                                disabled={(
+                                                                onSelect={(
                                                                     date
                                                                 ) => {
-                                                                    const workDate =
-                                                                        form.watch(
-                                                                            'workDate'
-                                                                        );
-                                                                    const nextDay =
-                                                                        new Date(
-                                                                            workDate
-                                                                        );
-                                                                    nextDay.setDate(
-                                                                        nextDay.getDate() +
-                                                                            1
+                                                                    field.onChange(
+                                                                        date
                                                                     );
-
-                                                                    return (
-                                                                        date.toDateString() !==
-                                                                        nextDay.toDateString()
+                                                                    setIsPopoverOpen(
+                                                                        false
                                                                     );
                                                                 }}
+                                                                disabled={(
+                                                                    date
+                                                                ) =>
+                                                                    date >
+                                                                        new Date() ||
+                                                                    date <
+                                                                        new Date(
+                                                                            '1900-01-01'
+                                                                        )
+                                                                }
                                                                 initialFocus
                                                             />
                                                         </PopoverContent>
                                                     </Popover>
-                                                    <FormMessage />
+                                                )}
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {form.watch('isOvernightShift') && (
+                                        <FormField
+                                            control={form.control}
+                                            name="endDate"
+                                            disabled={true}
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-col mt-2">
+                                                    <FormLabel>
+                                                        End Date
+                                                    </FormLabel>
+                                                    {isSafari ? (
+                                                        <Dialog
+                                                            open={isPopoverOpen}
+                                                            onOpenChange={
+                                                                setIsPopoverOpen
+                                                            }
+                                                        >
+                                                            <DialogTrigger
+                                                                asChild
+                                                            >
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    className="w-[240px] pl-3 text-left font-normal"
+                                                                >
+                                                                    {field.value ? (
+                                                                        format(
+                                                                            field.value,
+                                                                            'PPP'
+                                                                        )
+                                                                    ) : (
+                                                                        <span>
+                                                                            Pick
+                                                                            a
+                                                                            date
+                                                                        </span>
+                                                                    )}
+                                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                                </Button>
+                                                            </DialogTrigger>
+                                                            <DialogContent className="w-auto p-4">
+                                                                <DialogTitle className="hidden">
+                                                                    select a
+                                                                    date
+                                                                </DialogTitle>
+                                                                <DialogDescription className="hidden">
+                                                                    the date you
+                                                                    have worked
+                                                                </DialogDescription>
+                                                                <Calendar
+                                                                    mode="single"
+                                                                    selected={
+                                                                        field.value
+                                                                            ? new Date(
+                                                                                  field.value
+                                                                              )
+                                                                            : undefined
+                                                                    }
+                                                                    defaultMonth={
+                                                                        field.value
+                                                                            ? new Date(
+                                                                                  field.value
+                                                                              )
+                                                                            : new Date()
+                                                                    }
+                                                                    disabled={(
+                                                                        date
+                                                                    ) =>
+                                                                        date >
+                                                                            new Date() ||
+                                                                        date <
+                                                                            new Date(
+                                                                                '1900-01-01'
+                                                                            )
+                                                                    }
+                                                                    onSelect={(
+                                                                        date
+                                                                    ) => {
+                                                                        field.onChange(
+                                                                            date
+                                                                        );
+                                                                        setIsPopoverOpen(
+                                                                            false
+                                                                        );
+                                                                    }}
+                                                                    initialFocus
+                                                                />
+                                                            </DialogContent>
+                                                        </Dialog>
+                                                    ) : (
+                                                        <Popover
+                                                            open={isPopoverOpen}
+                                                            onOpenChange={
+                                                                setIsPopoverOpen
+                                                            }
+                                                        >
+                                                            <PopoverTrigger
+                                                                asChild
+                                                            >
+                                                                <FormControl>
+                                                                    <Button
+                                                                        variant={
+                                                                            'outline'
+                                                                        }
+                                                                        className={cn(
+                                                                            'w-[240px] pl-3 text-left font-normal',
+                                                                            !field.value &&
+                                                                                'text-muted-foreground'
+                                                                        )}
+                                                                    >
+                                                                        {field.value ? (
+                                                                            format(
+                                                                                field.value,
+                                                                                'PPP'
+                                                                            )
+                                                                        ) : (
+                                                                            <span>
+                                                                                Pick
+                                                                                a
+                                                                                date
+                                                                            </span>
+                                                                        )}
+                                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                                    </Button>
+                                                                </FormControl>
+                                                            </PopoverTrigger>
+                                                            <PopoverContent
+                                                                className="w-auto p-0"
+                                                                align="start"
+                                                            >
+                                                                <Calendar
+                                                                    mode="single"
+                                                                    selected={
+                                                                        field.value
+                                                                    }
+                                                                    onSelect={(
+                                                                        date
+                                                                    ) => {
+                                                                        field.onChange(
+                                                                            date
+                                                                        );
+                                                                        setIsPopoverOpen(
+                                                                            false
+                                                                        );
+                                                                    }}
+                                                                    disabled={(
+                                                                        date
+                                                                    ) =>
+                                                                        date >
+                                                                            new Date() ||
+                                                                        date <
+                                                                            new Date(
+                                                                                '1900-01-01'
+                                                                            )
+                                                                    }
+                                                                    initialFocus
+                                                                />
+                                                            </PopoverContent>
+                                                        </Popover>
+                                                    )}
                                                 </FormItem>
                                             )}
                                         />
@@ -441,13 +607,23 @@ export const EditHours = ({ companies }: Props) => {
                                                     Start Time
                                                 </FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        type="time"
-                                                        {...field}
-                                                        value={
-                                                            field.value ?? ''
-                                                        }
-                                                    />
+                                                    {isSafari ? (
+                                                        <TimePicker
+                                                            value={field.value}
+                                                            onChange={
+                                                                field.onChange
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <Input
+                                                            type="time"
+                                                            {...field}
+                                                            value={
+                                                                field.value ??
+                                                                ''
+                                                            }
+                                                        />
+                                                    )}
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -460,13 +636,23 @@ export const EditHours = ({ companies }: Props) => {
                                             <FormItem>
                                                 <FormLabel>End Time</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        type="time"
-                                                        {...field}
-                                                        value={
-                                                            field.value ?? ''
-                                                        }
-                                                    />
+                                                    {isSafari ? (
+                                                        <TimePicker
+                                                            value={field.value}
+                                                            onChange={
+                                                                field.onChange
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <Input
+                                                            type="time"
+                                                            {...field}
+                                                            value={
+                                                                field.value ??
+                                                                ''
+                                                            }
+                                                        />
+                                                    )}
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

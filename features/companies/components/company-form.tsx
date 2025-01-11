@@ -28,6 +28,9 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
+import { useBrowser } from '@/hooks/use-browser';
 
 const formSchema = z.object({
     name: z.string().regex(/^[a-zA-Z\s]*$/, 'Invalid company name'),
@@ -81,6 +84,9 @@ export const CompanyForm = ({
     disabled,
 }: Props) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+    //Device detection
+    const { isSafari } = useBrowser();
 
     const handleDateSelect = (date: Date | undefined) => {
         if (!date) return;
@@ -162,57 +168,119 @@ export const CompanyForm = ({
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Joining Date</FormLabel>
-                            <Popover
-                                open={isPopoverOpen}
-                                onOpenChange={setIsPopoverOpen}
-                            >
-                                <PopoverTrigger asChild>
-                                    <FormControl>
+                            {isSafari ? (
+                                <Dialog
+                                    open={isPopoverOpen}
+                                    onOpenChange={setIsPopoverOpen}
+                                >
+                                    <DialogTrigger asChild>
                                         <Button
-                                            variant={'outline'}
-                                            className={cn(
-                                                'w-[240px] pl-3 text-left font-normal',
-                                                !field.value &&
-                                                    'text-muted-foreground'
-                                            )}
+                                            type="button"
+                                            variant="outline"
+                                            className="w-[240px] pl-3 text-left font-normal"
                                         >
                                             {field.value ? (
-                                                format(field.value, 'PPP')
+                                                format(
+                                                    new Date(field.value),
+                                                    'PPP'
+                                                )
                                             ) : (
-                                                <span>Choose a date</span>
+                                                <span>Pick a date</span>
                                             )}
                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                         </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className="w-auto p-0"
-                                    align="start"
+                                    </DialogTrigger>
+                                    <DialogContent className="w-auto p-4">
+                                        <DialogTitle className="hidden">
+                                            select a date
+                                        </DialogTitle>
+                                        <DialogDescription className="hidden">
+                                            the date you joined company
+                                        </DialogDescription>
+                                        <Calendar
+                                            mode="single"
+                                            selected={
+                                                field.value
+                                                    ? new Date(field.value)
+                                                    : undefined
+                                            }
+                                            defaultMonth={
+                                                field.value
+                                                    ? new Date(field.value)
+                                                    : new Date()
+                                            }
+                                            disabled={(date) =>
+                                                date > new Date() ||
+                                                date < new Date('1900-01-01')
+                                            }
+                                            onSelect={(date) => {
+                                                field.onChange(
+                                                    date
+                                                        ? format(
+                                                              date,
+                                                              'yyyy-MM-dd'
+                                                          )
+                                                        : ''
+                                                );
+                                                setIsPopoverOpen(false);
+                                            }}
+                                            initialFocus
+                                        />
+                                    </DialogContent>
+                                </Dialog>
+                            ) : (
+                                <Popover
+                                    open={isPopoverOpen}
+                                    onOpenChange={setIsPopoverOpen}
                                 >
-                                    <Calendar
-                                        mode="single"
-                                        selected={
-                                            field.value
-                                                ? new Date(field.value)
-                                                : undefined
-                                        }
-                                        defaultMonth={
-                                            field.value
-                                                ? new Date(field.value)
-                                                : new Date()
-                                        }
-                                        onSelect={(date) => {
-                                            field.onChange(date);
-                                            handleDateSelect(date);
-                                        }}
-                                        disabled={(date) =>
-                                            date > new Date() ||
-                                            date < new Date('1900-01-01')
-                                        }
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                                    <PopoverTrigger asChild>
+                                        <FormControl>
+                                            <Button
+                                                variant={'outline'}
+                                                className={cn(
+                                                    'w-[240px] pl-3 text-left font-normal',
+                                                    !field.value &&
+                                                        'text-muted-foreground'
+                                                )}
+                                            >
+                                                {field.value ? (
+                                                    format(field.value, 'PPP')
+                                                ) : (
+                                                    <span>Choose a date</span>
+                                                )}
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                        className="w-auto p-0"
+                                        align="start"
+                                    >
+                                        <Calendar
+                                            mode="single"
+                                            selected={
+                                                field.value
+                                                    ? new Date(field.value)
+                                                    : undefined
+                                            }
+                                            defaultMonth={
+                                                field.value
+                                                    ? new Date(field.value)
+                                                    : new Date()
+                                            }
+                                            onSelect={(date) => {
+                                                field.onChange(date);
+                                                handleDateSelect(date);
+                                            }}
+                                            disabled={(date) =>
+                                                date > new Date() ||
+                                                date < new Date('1900-01-01')
+                                            }
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            )}
                             <FormDescription>
                                 The date you joined the company.
                             </FormDescription>
