@@ -28,7 +28,7 @@ const routes = [
     },
     {
         href: '/working-hours',
-        label: 'Hours',
+        label: 'Time Sheet',
     },
 ];
 

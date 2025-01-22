@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 
 import {
@@ -16,7 +16,7 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
+    // FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -42,7 +42,7 @@ import { cn } from '@/lib/utils';
 import { useGetCompanies } from '@/features/companies/api/use-get-companies';
 import { useNewHours } from '@/features/hours/hooks/use-new-hours';
 import { useCreateHours } from '@/features/hours/api/use-create-hours';
-import { Switch } from '@/components/ui/switch';
+// import { Switch } from '@/components/ui/switch';
 import { useBrowser } from '@/hooks/use-browser';
 import { TimePicker } from '@/components/time-picker';
 
@@ -107,8 +107,8 @@ export const NewHours = () => {
         mode: 'onChange',
         defaultValues: {
             isOvernightShift: false,
-            startDate: new Date(),
-            endDate: addDays(new Date(), 1),
+            startDate: undefined,
+            endDate: undefined,
         },
     });
 
@@ -132,16 +132,16 @@ export const NewHours = () => {
 
     // Watch for startDate changes
     // Create stable references to watched values
-    const startDate = form.watch('startDate');
-    const isOvernightShift = form.watch('isOvernightShift');
+    // const startDate = form.watch('startDate');
+    // const isOvernightShift = form.watch('isOvernightShift');
 
-    useEffect(() => {
-        if (startDate && form.getValues('isOvernightShift')) {
-            form.setValue('endDate', addDays(startDate, 1));
-        } else {
-            form.setValue('endDate', undefined);
-        }
-    }, [form, startDate, isOvernightShift]);
+    // useEffect(() => {
+    //     if (startDate || form.getValues('isOvernightShift')) {
+    //         form.setValue('endDate', addDays(startDate, 1));
+    //     } else {
+    //         form.setValue('endDate', undefined);
+    //     }
+    // }, [form, startDate, isOvernightShift]);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -158,7 +158,8 @@ export const NewHours = () => {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-4"
                     >
-                        <FormField
+                        {/* TODO: need to fix issue */}
+                        {/* <FormField
                             control={form.control}
                             name="isOvernightShift"
                             render={({ field }) => (
@@ -180,7 +181,8 @@ export const NewHours = () => {
                                     </FormControl>
                                 </FormItem>
                             )}
-                        />
+                        /> */}
+
                         <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                             <FormField
                                 control={form.control}
@@ -233,6 +235,11 @@ export const NewHours = () => {
                                                         type="button"
                                                         variant="outline"
                                                         className="w-[240px] pl-3 text-left font-normal"
+                                                        onClick={() =>
+                                                            setIsPopoverOpen(
+                                                                true
+                                                            )
+                                                        }
                                                     >
                                                         {field.value ? (
                                                             format(
@@ -303,6 +310,11 @@ export const NewHours = () => {
                                                                 !field.value &&
                                                                     'text-muted-foreground'
                                                             )}
+                                                            onClick={() =>
+                                                                setIsPopoverOpen(
+                                                                    true
+                                                                )
+                                                            }
                                                         >
                                                             {field.value ? (
                                                                 format(

@@ -57,7 +57,7 @@ export const WorkHoursListingItem = ({
                                 Total time: {totalHours} hr
                             </div>
                             <div className="text-sm text-muted-foreground">
-                                Estimated Pay: ${estimatedPay}
+                                Estimated Pay: ${estimatedPay.toFixed(2)}
                             </div>
                         </div>
                     </div>

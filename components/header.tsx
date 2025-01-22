@@ -18,6 +18,8 @@ export const Header = () => {
                             appearance={{
                                 elements: {
                                     userButtonOuterIdentifier: 'text-white',
+                                    userButtonPopoverActions:
+                                        'flex flex-col [&>:first-child]:hidden',
                                 },
                             }}
                         />

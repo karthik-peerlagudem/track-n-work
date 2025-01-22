@@ -16,7 +16,7 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
+    // FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -39,7 +39,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-import { Switch } from '@/components/ui/switch';
+// import { Switch } from '@/components/ui/switch';
 import { useOpenHours } from '@/features/hours/hooks/use-open-hours';
 import { useGetHour } from '@/features/hours/api/use-get-hour';
 import { useEditHours } from '@/features/hours/api/use-edit-hours';
@@ -200,6 +200,7 @@ export const EditHours = ({ companies }: Props) => {
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="space-y-4"
                             >
+                                {/* TODO: need to fix issue
                                 <FormField
                                     control={form.control}
                                     name="isOvernightShift"
@@ -224,7 +225,7 @@ export const EditHours = ({ companies }: Props) => {
                                             </FormControl>
                                         </FormItem>
                                     )}
-                                />
+                                /> */}
                                 <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                                     <FormField
                                         control={form.control}
